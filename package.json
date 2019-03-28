@@ -1,0 +1,23 @@
+{
+  "name": "telegram-broker",
+  "version": "1.0.0",
+  "description": "A server that comunicate with telegram to manage info",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joolfe/telegram-broker.git"
+  },
+  "keywords": [
+    "telegram",
+    "poc"
+  ],
+  "author": "joolfe04@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joolfe/telegram-broker/issues"
+  },
+  "homepage": "https://github.com/joolfe/telegram-broker#readme"
+}
