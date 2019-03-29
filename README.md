@@ -1,28 +1,7 @@
 # telegram-broker
-Testing telegram API with a real use case
+Testing telegram API with a real use case.
 
-# What we want to do?
-The main Objectives of this project is to learn the telegram API and discover a way to use from a server, instead just read the documentation we are going to focus in develop a server that will do some usefull work :-).
-There are lot of "offer" or "deals" channels that proclaim to have the best offers of internet, indeed there are lot of work behind this channels but when you start to add this channels to your telegram client soon or later you are overwhelmed with all this offers and deals and normally you never find what you need, use the Search function in the channels is a pain...
-So what we are going to implement is a "offer broker" that will read the message from the channels and will filter to the offers that really are interesting for us.
-
-# Requeriments/Objectives
-A plane list of requeriments so we can follow the implementation:
-
-## Using telegram
-- Login as a user (phone number)
-- Get a channel id
-- Read messages from a channel
-- 
-## Filtering offers
-- 
-
-# Preamble
-//TODO describe the options that teegram offer us
-
-//TODO puting links to the official doc and to the stack overflow.
-
-//TODO just mention some optiosn that we can use from stack overflow and why we have choose the proto m.
+See the /docs folder for more info, this repo is going to be explained step by step in the doc.
 
 
 # Ideas/Todo
