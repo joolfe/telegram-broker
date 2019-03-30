@@ -31,8 +31,11 @@ npm start
 
 We should see in the terminal a `Hello telegram!` message, good job! :-)
 
-You can see the code after execute this steps in this [commit]()
+You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.1/src)
 
 ## Registering a telegram APP
 
+To use telegram API we need some keys that identify our app, we just follow the step described in the [telegram documentation](https://core.telegram.org/api/obtaining_api_id), is basically login into the telegram core web and register a new application.
+
+As result we will obtain some needed info for connect to the API like the api_id and api_hash, for now just save this values in somewhere secure, we will use it in the future.
 
