@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/joolfe/telegram-broker/issues"
   },
-  "homepage": "https://github.com/joolfe/telegram-broker#readme"
+  "homepage": "https://github.com/joolfe/telegram-broker#readme",
+  "dependencies": {
+    "telegram-mtproto": "^2.2.8"
+  }
 }
