@@ -4,3 +4,5 @@ envSetUp
 node_modules/
 
 envSetUp\.sh
+
+src/session\.json

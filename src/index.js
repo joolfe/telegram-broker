@@ -41,11 +41,36 @@ const askForCode = () => {
   })
 };
 
+async function connect(){
+
+  const { phone_code_hash } = await client('auth.sendCode', {
+    phone_number  : phone_number,
+    current_number: false,
+    api_id        : app_cfg.api_id,
+    api_hash      : app_cfg.api_hash
+  })
+
+  console.log('Wow we get something? ', phone_code_hash)
+
+  let phone_code = await askForCode();
+
+  console.log('We have the phone code:', phone_number);
+
+  const { user } = await client('auth.signIn', {
+    phone_number   : phone_number,
+    phone_code_hash: phone_code_hash,
+    phone_code     : phone_code
+  })
+
+  console.log('Wow we are signed as ', user)
+
+}
+
 (async function() {
   console.log("We are running!");
 
-  let code = await askForCode();
+  await connect();
 
-  console.log("And the code is: " + code);
+  console.log("And now we are running!");
 })();
 

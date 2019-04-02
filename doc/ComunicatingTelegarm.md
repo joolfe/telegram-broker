@@ -122,7 +122,55 @@ And the code is: 45678
 > You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.3/src)
 
 
+Ok now we have all the tools to do the authorization flow, we are going to put the code inside a function let see the code and we will analize:
+
+```
+async function connect(){
+
+  const { phone_code_hash } = await client('auth.sendCode', {
+    phone_number  : phone_number,
+    current_number: false,
+    api_id        : app_cfg.api_id,
+    api_hash      : app_cfg.api_hash
+  })
+
+  console.log('Wow we get something? ', phone_code_hash)
+
+  let phone_code = await askForCode();
+
+  console.log('We have the phone code:', phone_number);
+
+  const { user } = await client('auth.signIn', {
+    phone_number   : phone_number,
+    phone_code_hash: phone_code_hash,
+    phone_code     : phone_code
+  })
+
+  console.log('Wow we are signed as ', user)
+
+}
+```
+
+Basically as we already mention we are doing two calls using the telegram `client`, first to the `auth.sendCode` MTproto method using the api config params and the phone number, then we wait for the user input using our recently created method `askForCode()` and when we have the code we call to `auth.signIn` MTproto method using the phone code, phone number and a `phone_code_hash` that have been returned in the first MTproto call (for trazability and security i supose), if we have use the correct data at the end we are logged into telegram! :-)
+
+To test we can change a little our last funciton in the script:
+
+```
+(async function() {
+  console.log("We are running!");
+
+  await connect();
+
+  console.log("And now we are running!");
+})();
+```
+
+And just use `$ npm start` as usual.
+
+> You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.4/src)
+
 ## Avoid login again and again...
+
 
 
 ## Fixing random connections errors
