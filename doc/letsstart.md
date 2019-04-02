@@ -31,7 +31,7 @@ npm start
 
 We should see in the terminal a `Hello telegram!` message, good job! :-)
 
-You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.1/src)
+> You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.1/src)
 
 ## Registering a telegram APP
 

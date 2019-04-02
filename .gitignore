@@ -2,3 +2,5 @@
 envSetUp
 
 node_modules/
+
+envSetUp\.sh

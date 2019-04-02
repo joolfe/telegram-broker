@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/joolfe/telegram-broker#readme",
   "dependencies": {
-    "telegram-mtproto": "^2.2.8"
+    "mtproto-storage-fs": "^0.3.1",
+    "readline": "^1.3.0",
+    "telegram-mtproto": "^3.0.6"
   }
 }
