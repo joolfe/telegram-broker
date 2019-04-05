@@ -41,7 +41,7 @@ const askForCode = () => {
   })
 };
 
-async function connect(){
+async function authorize(){
 
   const { phone_code_hash } = await client('auth.sendCode', {
     phone_number  : phone_number,
@@ -64,6 +64,19 @@ async function connect(){
 
   console.log('Wow we are signed as ', user)
 
+}
+
+async function connect(){
+
+  if (!(await app.storage.get('signedin'))) {
+    console.log('Not signed in');
+    await authorize();
+    console.log('Signed in successfully');
+    app.storage.set('signedin', true);
+  } else {
+    console.log('Already signed in');
+  }
+  
 }
 
 (async function() {

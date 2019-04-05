@@ -62,13 +62,13 @@ Now it's time to test, if we run `npm start` we should see our wellcome message 
 
 ## Authorization flow
 
-Well we have created a telegram client, not too impressive because we have not really communicate yet, to start the communication with telegram we need firt to authenticate, and we will follow this [documentation](https://core.telegram.org/api/auth)
+Well we have created a telegram client, not too impressive because we have not really communicate yet, to start the communication with telegram we need first to authenticate, and we will follow this [documentation](https://core.telegram.org/api/auth) for it.
 
 Because we are not going to use the Bot API (remember the reasons in the "telegarm API" page) to authenticate we need a User credential, this is just a real Phone number and a code that is sent via Telegram or SMS to validate this phone.
 
 So the authentication that we are going to implement has two steps, first we will request a method `auth.sendCode` and when we recieve the code in the phone we will use the method `auth.signIn` to login. As result our telegram client is logged in and can execute API calls with a logged session.
 
-So as first step we are going to create a way to ask the code from the program, this code is a variable value and we cannot hardcode in the code or in a config file, as temporal solution we can use the console and we will improve in the future. Lets create a function that do this job but for make it easier let us use a library 
+So as first step we are going to create a way to ask the validation code from the program, this code is a variable value and we cannot hardcode in the code or in a config file, as temporal solution we can use the console as input, we will improve this in the future... So lets create a function that do this job but for make it easier let us use a library 
 
 ```
 $ npm install --save readline
@@ -119,10 +119,12 @@ Please enter passcode for +34XXXXXX:
 And the code is: 45678
 ```
 
-> You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.3/src)
+> You can see the code after execute this steps in this git [tag](https://github.com/joolfe/telegram-broker/tree/v0.3/src)
 
 
-Ok now we have all the tools to do the authorization flow, we are going to put the code inside a function let see the code and we will analize:
+Ok now we have all the tools to do the authorization flow, to use the MTProto client is very easy, we just need to call the `client()` function using as first parameter a string that represent the method name like `auth.sendCode` and as second parameter a JSON object containing all the input params, the return value of this function is a Promise so we can consume using an `await` or a `then()` funtion. 
+
+We are going to put all the authorization code inside a function `connect()`, let us see the code and then we can analize:
 
 ```
 async function connect(){
@@ -153,7 +155,7 @@ async function connect(){
 
 Basically as we already mention we are doing two calls using the telegram `client`, first to the `auth.sendCode` MTproto method using the api config params and the phone number, then we wait for the user input using our recently created method `askForCode()` and when we have the code we call to `auth.signIn` MTproto method using the phone code, phone number and a `phone_code_hash` that have been returned in the first MTproto call (for trazability and security i supose), if we have use the correct data at the end we are logged into telegram! :-)
 
-To test we can change a little our last funciton in the script:
+To test our new funtion we can change a little our code ike this:
 
 ```
 (async function() {
@@ -167,10 +169,46 @@ To test we can change a little our last funciton in the script:
 
 And just use `$ npm start` as usual.
 
-> You can see the code after execute this steps in this git tag [commit](https://github.com/joolfe/telegram-broker/tree/v0.4/src)
+> You can see the code after execute this steps in this git [tag](https://github.com/joolfe/telegram-broker/tree/v0.4/src)
 
 ## Avoid login again and again...
 
+We have progress a lot in our app but if you test the app a few times you will realize that each time we should introduce a code, not too util... for avoid this MTProto use sessions, for example if you are using telegram in your mobile device you don't have to authenticate all the times that you open the app, this is because the telegram session is stored locally in your phone and the app use this to comunicate.
+
+Fortunately telegram-mtproto library comes with builtin support for storage session, we can implement a storage solution but the easiest way to use this feature is using the library `mtproto-storage-fs`. 
+Use this library cannot be easier, first install using `$ npm install --save 'mtproto-storage-fs` then we can import in our `index.js`, initialize a `Storage` object and pass this parameter to our telegram client instantiation, just this code:
+
+```
+const { Storage } = require('mtproto-storage-fs');
+
+const app = {
+  storage: new Storage('./session.json')
+};
+
+const client = MTProto({ server, api, app });
+```
+
+With this code the telegram session will be store in a `session.js` file, but if you test the app now still the verification code is required in each execution, this is because the `telegram-mtproto` doesn´t has the logic to check if the session exist and avoid ask again for authentication so let us create this logic in our app:
+
+```
+async function connect(){
+
+  if (!(await app.storage.get('signedin'))) {
+    console.log('Not signed in');
+    await authorize();
+    console.log('Signed in successfully');
+    app.storage.set('signedin', true);
+  } else {
+    console.log('Already signed in');
+  }
+  
+}
+```
+
+First we have done a little refactor so our old method `connect()` now is called `authorize()`, that have more sense, and now we have create a new `connect()` function that contains the logic for only ask for authentictaion is needed, if you see the code is very clear, we just store a key in our `Storage` object that say the user is already signedin.
+You can test now and see that first time code is asked but the next time you are already signed in. cool!
+
+> You can see the code after execute this steps in this git [tag](https://github.com/joolfe/telegram-broker/tree/v0.5/src)
 
 
 ## Fixing random connections errors
